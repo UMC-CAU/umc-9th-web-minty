@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MlNTY TODO</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="todo-container">
+        <div class="todo-header">
+            <h1>MlNTY TODO</h1>
+        </div>
+
+        <div class="input-section">
+            <div class="todo-container-form">
+                <input type="text" id="todo-input" placeholder="할 일 입력">
+            </div>
+            <div class="todo-container-button">
+                <button id="add-todo-btn">할 일 추가</button>
+            </div>
+        </div>
+
+        <div class="render-section">
+            <div class="render-container">
+                <div class="render-container-title">
+                    <h2>할 일</h2>
+                </div>
+                <div class="render-container-list" id="todo-list">
+                </div>
+            </div>
+
+            <div class="render-container">
+                <div class="render-container-title">
+                    <h2>완료</h2>
+                </div>
+                <div class="render-container-list" id="completed-list">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dist/script.js"></script>
+</body>
+</html>
