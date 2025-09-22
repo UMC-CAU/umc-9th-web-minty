@@ -88,32 +88,30 @@ function deleteTodo(id: string): void {
 
 // 7. 할 일 아이템 생성 함수 (완료 여부에 따라 버튼 텍스트나 색상 설정)
 function createTodoItem(todo: Todo): HTMLElement {
-    const todoElement = document.createElement('div');
-    todoElement.className = `todo-item ${todo.completed ? 'completed' : 'pending'}`;
+    const todoElement = document.createElement('li');
+    todoElement.className = 'render-container-list';
 
-    const todoText = document.createElement('span');
+    const todoText = document.createElement('p');
     todoText.className = 'todo-text';
     todoText.textContent = todo.text;
-
-    const actionsContainer = document.createElement('div');
-    actionsContainer.className = 'todo-actions';
 
     if (!todo.completed) {
         const completeButton = document.createElement('button');
         completeButton.className = 'btn-complete';
         completeButton.textContent = '완료';
         completeButton.addEventListener('click', () => completeTodo(todo.id));
-        actionsContainer.appendChild(completeButton);
+
+        todoElement.appendChild(todoText);
+        todoElement.appendChild(completeButton);
     } else {
         const deleteButton = document.createElement('button');
         deleteButton.className = 'btn-delete';
         deleteButton.textContent = '삭제';
         deleteButton.addEventListener('click', () => deleteTodo(todo.id));
-        actionsContainer.appendChild(deleteButton);
-    }
 
-    todoElement.appendChild(todoText);
-    todoElement.appendChild(actionsContainer);
+        todoElement.appendChild(todoText);
+        todoElement.appendChild(deleteButton);
+    }
 
     return todoElement;
 }
