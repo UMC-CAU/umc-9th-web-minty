@@ -1,25 +1,21 @@
 import React from 'react';
+import { useTodoContext } from '../context/TodoContext';
 
-interface TodoInputProps {
-  inputValue: string;
-  setInputValue: (value: string) => void;
-  addTodo: () => void;
-}
-
-function TodoInput({ inputValue, setInputValue, addTodo }: TodoInputProps) {
+function TodoInput() {
+  const { inputValue, setInputValue, handleAddTodo } = useTodoContext();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setInputValue(e.target.value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
-      addTodo();
+      handleAddTodo();
     }
   };
 
   return (
     <section className="input-section">
-      <form className="todo-container-form" onSubmit={(e) => { e.preventDefault(); addTodo(); }}>
+      <form className="todo-container-form" onSubmit={(e) => { e.preventDefault(); handleAddTodo(); }}>
         <input
           type="text"
           id="todo-input"
@@ -30,7 +26,7 @@ function TodoInput({ inputValue, setInputValue, addTodo }: TodoInputProps) {
         />
       </form>
       <div className="todo-container-button">
-        <button id="add-todo-btn" onClick={addTodo}>
+        <button id="add-todo-btn" onClick={handleAddTodo}>
           할 일 추가
         </button>
       </div>

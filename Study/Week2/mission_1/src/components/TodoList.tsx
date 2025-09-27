@@ -1,16 +1,18 @@
 
-import { type Todo } from '../hooks/useTodos';
+import { useTodoContext } from '../context/TodoContext';
 
 interface TodoListProps {
-  todos: Todo[];
   title: string;
   emptyMessage: string;
   listType: 'pending' | 'completed';
-  onComplete?: (id: string) => void;
-  onDelete?: (id: string) => void;
 }
 
-function TodoList({ todos, title, emptyMessage, listType, onComplete, onDelete }: TodoListProps) {
+function TodoList({ title, emptyMessage, listType }: TodoListProps) {
+  const { pendingTodos, completedTodos, completeTodo, deleteTodo } = useTodoContext();
+
+  const todos = listType === 'pending' ? pendingTodos : completedTodos;
+  const onComplete = listType === 'pending' ? completeTodo : undefined;
+  const onDelete = listType === 'completed' ? deleteTodo : undefined;
   return (
     <article className="render-container">
       <header className="render-container-title">
