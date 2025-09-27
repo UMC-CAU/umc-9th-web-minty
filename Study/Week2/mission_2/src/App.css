@@ -1,0 +1,174 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
+.todo-container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  width: 100%;
+  max-width: 600px;
+  min-width: 500px;
+  margin: 0 auto;
+}
+
+.todo-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.todo-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  letter-spacing: 1px;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.input-section {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.todo-container-form {
+  flex: 1;
+}
+
+.todo-container-form input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.todo-container-form input:focus {
+  border-color: #10b981;
+}
+
+.todo-container-button button {
+  padding: 12px 20px;
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.todo-container-button button:hover {
+  background-color: #059669;
+}
+
+.render-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.render-container {
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 20px;
+  min-height: 300px;
+}
+
+.render-container-title {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.render-container-title h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.render-container-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.render-container-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.todo-text {
+  flex: 1;
+  font-size: 14px;
+  color: #374151;
+  margin: 0;
+}
+
+.btn-complete {
+  padding: 6px 12px;
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-complete:hover {
+  background-color: #059669;
+}
+
+.btn-delete {
+  padding: 6px 12px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-delete:hover {
+  background-color: #dc2626;
+}
+
+.empty-state {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+  margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+  .todo-container {
+    min-width: auto;
+    max-width: 100%;
+    padding: 16px;
+  }
+
+  .render-section {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .input-section {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
