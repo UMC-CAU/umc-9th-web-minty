@@ -11,8 +11,6 @@ function TodoList({ title, emptyMessage, listType }: TodoListProps) {
   const { pendingTodos, completedTodos, completeTodo, deleteTodo } = useTodoContext();
 
   const todos = listType === 'pending' ? pendingTodos : completedTodos;
-  const onComplete = listType === 'pending' ? completeTodo : undefined;
-  const onDelete = listType === 'completed' ? deleteTodo : undefined;
   return (
     <article className="render-container">
       <header className="render-container-title">
@@ -25,19 +23,19 @@ function TodoList({ title, emptyMessage, listType }: TodoListProps) {
           {todos.map(todo => (
             <li key={todo.id} className="render-container-list">
               <p className="todo-text">{todo.text}</p>
-              {listType === 'pending' && onComplete && (
+              {listType === 'pending' && (
                 <button
                   className="btn-complete"
-                  onClick={() => onComplete(todo.id)}
+                  onClick={() => completeTodo(todo.id)}
                   aria-label={`${todo.text} 완료하기`}
                 >
                   완료
                 </button>
               )}
-              {listType === 'completed' && onDelete && (
+              {listType === 'completed' && (
                 <button
                   className="btn-delete"
-                  onClick={() => onDelete(todo.id)}
+                  onClick={() => deleteTodo(todo.id)}
                   aria-label={`${todo.text} 삭제하기`}
                 >
                   삭제
