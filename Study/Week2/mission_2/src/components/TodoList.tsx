@@ -23,24 +23,13 @@ function TodoList({ title, emptyMessage, listType }: TodoListProps) {
           {todos.map(todo => (
             <li key={todo.id} className="render-container-list">
               <p className="todo-text">{todo.text}</p>
-              {listType === 'pending' && (
-                <button
-                  className="btn-complete"
-                  onClick={() => completeTodo(todo.id)}
-                  aria-label={`${todo.text} 완료하기`}
-                >
-                  완료
-                </button>
-              )}
-              {listType === 'completed' && (
-                <button
-                  className="btn-delete"
-                  onClick={() => deleteTodo(todo.id)}
-                  aria-label={`${todo.text} 삭제하기`}
-                >
-                  삭제
-                </button>
-              )}
+              <button
+                className={listType === 'pending' ? 'btn-complete' : 'btn-delete'}
+                onClick={() => listType === 'pending' ? completeTodo(todo.id) : deleteTodo(todo.id)}
+                aria-label={`${todo.text} ${listType === 'pending' ? '완료하기' : '삭제하기'}`}
+              >
+                {listType === 'pending' ? '완료' : '삭제'}
+              </button>
             </li>
           ))}
         </ul>
