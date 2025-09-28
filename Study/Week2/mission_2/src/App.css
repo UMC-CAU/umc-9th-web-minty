@@ -1,9 +1,42 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 
+/* 색 관리용 CSS Variables */
+:root {
+  /* 라이트모드 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --text-primary: #333333;
+  --text-secondary: #374151;
+  --text-muted: #9ca3af;
+  --accent-green: #10b981;
+  --accent-green-hover: #059669;
+  --accent-red: #ef4444;
+  --accent-red-hover: #dc2626;
+  --border-color: #e5e7eb;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+  --shadow-card: rgba(0, 0, 0, 0.1);
+}
+
+/* 다크모드 */
+.dark {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --text-primary: #ffffff;
+  --text-secondary: #e5e7eb;
+  --text-muted: #9ca3af;
+  --accent-green: #10b981;
+  --accent-green-hover: #059669;
+  --accent-red: #ef4444;
+  --accent-red-hover: #dc2626;
+  --border-color: #404040;
+  --shadow-light: rgba(0, 0, 0, 0.3);
+  --shadow-card: rgba(0, 0, 0, 0.2);
+}
+
 .todo-container {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px var(--shadow-light);
   padding: 24px;
   width: 100%;
   max-width: 600px;
@@ -12,16 +45,41 @@
 }
 
 .todo-header {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 32px;
+  position: relative;
 }
 
 .todo-header h1 {
   font-size: 24px;
   font-weight: 700;
-  color: #333;
+  color: var(--text-primary);
   letter-spacing: 1px;
   font-family: 'Pretendard', sans-serif;
+}
+
+.theme-toggle-btn {
+  position: absolute;
+  right: 0;
+  background: none;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--accent-green);
+  transform: scale(1.05);
 }
 
 .input-section {
@@ -37,7 +95,7 @@
 .todo-container-form input {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--border-color);
   border-radius: 8px;
   font-size: 14px;
   outline: none;
@@ -46,13 +104,13 @@
 }
 
 .todo-container-form input:focus {
-  border-color: #10b981;
+  border-color: var(--accent-green);
 }
 
 .todo-container-button button {
   padding: 12px 20px;
-  background-color: #10b981;
-  color: white;
+  background-color: var(--accent-green);
+  color: var(--bg-primary);
   border: none;
   border-radius: 8px;
   font-size: 14px;
@@ -63,7 +121,7 @@
 }
 
 .todo-container-button button:hover {
-  background-color: #059669;
+  background-color: var(--accent-green-hover);
 }
 
 .render-section {
@@ -73,7 +131,7 @@
 }
 
 .render-container {
-  background-color: #f9fafb;
+  background-color: var(--bg-secondary);
   border-radius: 12px;
   padding: 20px;
   min-height: 300px;
@@ -87,7 +145,7 @@
 .render-container-title h2 {
   font-size: 18px;
   font-weight: 600;
-  color: #374151;
+  color: var(--text-secondary);
 }
 
 .render-container-list {
@@ -103,23 +161,23 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: white;
+  background: var(--bg-primary);
   padding: 12px 16px;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px var(--shadow-card);
 }
 
 .todo-text {
   flex: 1;
   font-size: 14px;
-  color: #374151;
+  color: var(--text-secondary);
   margin: 0;
 }
 
 .btn-complete {
   padding: 6px 12px;
-  background-color: #10b981;
-  color: white;
+  background-color: var(--accent-green);
+  color: var(--bg-primary);
   border: none;
   border-radius: 6px;
   font-size: 12px;
@@ -129,13 +187,13 @@
 }
 
 .btn-complete:hover {
-  background-color: #059669;
+  background-color: var(--accent-green-hover);
 }
 
 .btn-delete {
   padding: 6px 12px;
-  background-color: #ef4444;
-  color: white;
+  background-color: var(--accent-red);
+  color: var(--bg-primary);
   border: none;
   border-radius: 6px;
   font-size: 12px;
@@ -145,12 +203,12 @@
 }
 
 .btn-delete:hover {
-  background-color: #dc2626;
+  background-color: var(--accent-red-hover);
 }
 
 .empty-state {
   text-align: center;
-  color: #9ca3af;
+  color: var(--text-muted);
   font-size: 14px;
   margin-top: 40px;
 }
