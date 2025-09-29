@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/*페이지 배경이 너무 눈아팠어요..*/
+:root {
+  --bg-page: #f5f5f5;
+  --text-body: #333333;
+}
+
+.dark {
+  --bg-page: #0f0f0f;
+  --text-body: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Pretendard', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-body);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  margin: 0;
+  transition: background-color 0.4s ease, color 0.2s ease;/*다른게 뭔가 더 이뻐요*/
+}
