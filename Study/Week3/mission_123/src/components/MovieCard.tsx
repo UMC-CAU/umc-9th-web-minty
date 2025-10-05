@@ -12,7 +12,7 @@ interface MovieCardProps {
 function MovieCard({ movie }: MovieCardProps) {
   return (
     <article>
-      <Link to={`/movies/${movie.id}`}>
+      <Link to={`/movies/detail/${movie.id}`}>
         <div className="relative group cursor-pointer overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
           <img
             src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
