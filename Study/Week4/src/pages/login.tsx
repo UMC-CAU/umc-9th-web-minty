@@ -1,9 +1,24 @@
 import { useNavigate } from 'react-router-dom'
 import { useForm } from '../hooks/useForm'
 import { useLogin } from '../hooks/useLogin'
+import { validateEmail, validatePassword } from '../utils/validators'
+import Input from '../components/Input'
+import GoogleLoginButton from '../components/GoogleLoginButton'
+import SubmitButton from '../components/SubmitButton'
+import { FormProvider } from '../contexts/FormContext'
 
 function Login() {
-  const { values, handleChange, handleFocus, handleBlur, getFieldError, isValid } = useForm()
+  const formContext = useForm({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validators: {
+      email: validateEmail,
+      password: validatePassword,
+    },
+  })
+  const { values, isValid } = formContext
   const { loginMutation, error, isLoading } = useLogin()
   const navigate = useNavigate()
 
@@ -35,67 +50,30 @@ function Login() {
           </h1>
         </header>
 
-        <button
-          onClick={handleGoogleLogin}
-          className="w-full bg-white text-gray-800 py-3.5 rounded-lg font-medium hover:bg-gray-100 transition-colors flex items-center justify-center gap-3 mb-6"
-        >
-          <img src="/google.png" alt="Google" className="w-5 h-5" />
-          구글 로그인
-        </button>
+        <GoogleLoginButton onClick={handleGoogleLogin} />
 
-        <div className="flex items-center gap-4 mb-6" role="separator">
+        <div className="flex items-center gap-4 my-6" role="separator">
           <hr className="flex-1 border-gray-700" />
           <span className="text-gray-500 text-sm font-medium">OR</span>
           <hr className="flex-1 border-gray-700" />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg text-sm">
-              {error}
-            </div>
-          )}
-
-          <div>
-            <input
-              type="email"
-              value={values.email}
-              onChange={(e) => handleChange('email', e.target.value)}
-              onFocus={() => handleFocus('email')}
-              onBlur={() => handleBlur('email')}
-              className="w-full px-4 py-3.5 bg-gray-900 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors"
-              placeholder="이메일을 입력해주세요"
-              aria-label="이메일"
-            />
-            {getFieldError('email') && (
-              <p className="text-red-500 text-sm mt-1">{getFieldError('email')}</p>
+        <FormProvider value={formContext}>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg text-sm">
+                {error}
+              </div>
             )}
-          </div>
 
-          <div>
-            <input
-              type="password"
-              value={values.password}
-              onChange={(e) => handleChange('password', e.target.value)}
-              onFocus={() => handleFocus('password')}
-              onBlur={() => handleBlur('password')}
-              className="w-full px-4 py-3.5 bg-gray-900 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors"
-              placeholder="비밀번호를 입력해주세요"
-              aria-label="비밀번호"
-            />
-            {getFieldError('password') && (
-              <p className="text-red-500 text-sm mt-1">{getFieldError('password')}</p>
-            )}
-          </div>
+            <Input type="email" name="email" />
+            <Input type="password" name="password" />
 
-          <button
-            type="submit"
-            disabled={!isValid || isLoading}
-            className="w-full bg-gray-800 text-white py-3.5 rounded-lg font-medium hover:bg-gray-700 transition-colors mt-6 disabled:bg-gray-900 disabled:text-gray-600 disabled:cursor-not-allowed"
-          >
-            {isLoading ? '로그인 중...' : '로그인'}
-          </button>
-        </form>
+            <SubmitButton disabled={!isValid} isLoading={isLoading}>
+              {isLoading ? '로그인 중...' : '로그인'}
+            </SubmitButton>
+          </form>
+        </FormProvider>
       </section>
     </main>
   )
