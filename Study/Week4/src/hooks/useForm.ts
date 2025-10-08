@@ -91,8 +91,8 @@ export function useForm() {
   const isValid =
     values.email &&
     values.password &&
-    !errors.email &&
-    !errors.password
+    validateEmail(values.email) === '' &&
+    validatePassword(values.password) === ''
 
   return {
     values,

@@ -79,7 +79,7 @@ function Login() {
 
           <button
             type="submit"
-            disabled={!isValid}//추후 수정 필요. fucus, blur처리 반영해야함.
+            disabled={!isValid}
             className="w-full bg-gray-800 text-white py-3.5 rounded-lg font-medium hover:bg-gray-700 transition-colors mt-6 disabled:bg-gray-900 disabled:text-gray-600 disabled:cursor-not-allowed"
           >
             로그인
