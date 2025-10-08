@@ -1,13 +1,18 @@
 import { useNavigate } from 'react-router-dom'
 import { useForm } from '../hooks/useForm'
+import { useLogin } from '../hooks/useLogin'
 
 function Login() {
   const { values, handleChange, handleFocus, handleBlur, getFieldError, isValid } = useForm()
+  const { loginMutation, error, isLoading } = useLogin()
   const navigate = useNavigate()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Login attempt:', values)
+    await loginMutation({
+      email: values.email,
+      password: values.password,
+    })
   }
 
   const handleGoogleLogin = () => {
@@ -45,6 +50,12 @@ function Login() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
           <div>
             <input
               type="email"
@@ -79,10 +90,10 @@ function Login() {
 
           <button
             type="submit"
-            disabled={!isValid}
+            disabled={!isValid || isLoading}
             className="w-full bg-gray-800 text-white py-3.5 rounded-lg font-medium hover:bg-gray-700 transition-colors mt-6 disabled:bg-gray-900 disabled:text-gray-600 disabled:cursor-not-allowed"
           >
-            로그인
+            {isLoading ? '로그인 중...' : '로그인'}
           </button>
         </form>
       </section>
