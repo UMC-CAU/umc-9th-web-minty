@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+* {
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+}
+
+body {
+  background-color: #ffffff;
+  min-height: 100vh;
+}
