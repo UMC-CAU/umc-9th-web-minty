@@ -3,7 +3,7 @@ import { getAccessToken, getRefreshToken, setTokens, removeTokens } from '../uti
 import type { ApiErrorResponse, ApiResponse, RefreshTokenData } from '../types/api'
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: 'https://umc-web.kyeoungwoon.kr/',
   headers: {
     'Content-Type': 'application/json',
   },
