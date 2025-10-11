@@ -1,14 +1,9 @@
-import { useState } from 'react'
+import { forwardRef, useState } from 'react'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
-import { useFormContext } from '../contexts/FormContext'
+import type { FieldError } from 'react-hook-form'
 
 type BaseInputProps = {
-  name?: string
-  value?: string
-  onChange?: (value: string) => void
-  onFocus?: () => void
-  onBlur?: () => void
-  error?: string
+  error?: FieldError
   'aria-label'?: string
 }
 
@@ -22,7 +17,8 @@ type TextInputProps = BaseInputProps & {
   placeholder: string
 }
 
-type InputProps = EmailPasswordInputProps | TextInputProps
+type InputProps = (EmailPasswordInputProps | TextInputProps) &
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'>
 
 const defaultPlaceholders: Record<'email' | 'password', string> = {
   email: '이메일을 입력해주세요',
@@ -34,29 +30,18 @@ const defaultAriaLabels: Record<'email' | 'password', string> = {
   password: '비밀번호',
 }
 
-function Input(props: InputProps) {
-  const context = useFormContext()
+const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const [showPassword, setShowPassword] = useState(false)
   const {
     type,
-    name,
+    error,
+    placeholder: propPlaceholder,
     'aria-label': ariaLabel,
+    ...rest
   } = props
 
-  const value = name && context ? context.values[name] : props.value || ''
-  const handleChange = name && context
-    ? (val: string) => context.handleChange(name, val)
-    : props.onChange || (() => {})
-  const handleFocus = name && context
-    ? () => context.handleFocus(name)
-    : props.onFocus
-  const handleBlur = name && context
-    ? () => context.handleBlur(name)
-    : props.onBlur
-  const error = name && context ? context.getFieldError(name) : props.error
-
   const placeholder =
-    props.placeholder ||
+    propPlaceholder ||
     (type === 'email' || type === 'password' ? defaultPlaceholders[type] : '')
 
   const computedAriaLabel =
@@ -70,13 +55,13 @@ function Input(props: InputProps) {
       <div className="relative">
         <input
           type={inputType}
-          value={value}
-          onChange={(e) => handleChange(e.target.value)}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          ref={ref}
           className="w-full px-4 py-3.5 bg-gray-900 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors"
           placeholder={placeholder}
           aria-label={computedAriaLabel}
+          aria-invalid={!!error}
+          aria-describedby={error ? `${rest.name}-error` : undefined}
+          {...rest}
         />
         {type === 'password' && (
           <button
@@ -93,9 +78,15 @@ function Input(props: InputProps) {
           </button>
         )}
       </div>
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {error && (
+        <p id={`${rest.name}-error`} className="text-red-500 text-sm mt-1" role="alert">
+          {error.message}
+        </p>
+      )}
     </div>
   )
-}
+})
+
+Input.displayName = 'Input'
 
 export default Input

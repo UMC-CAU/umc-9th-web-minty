@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { AxiosError } from 'axios'
 import { login } from '../api/auth'
+import { setTokens } from '../utils/token'
 import type { LoginRequest } from '../types/auth'
+import type { ApiErrorResponse } from '../types/api'
 
-export function useLogin() {
-  const navigate = useNavigate()
+export function useLogin(onSuccess?: () => void) {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
@@ -15,13 +16,15 @@ export function useLogin() {
     try {
       const response = await login(credentials)
 
-      localStorage.setItem('accessToken', response.data.accessToken)
-      localStorage.setItem('refreshToken', response.data.refreshToken)
+      setTokens(response.data.accessToken, response.data.refreshToken)
 
-      navigate('/')
+      onSuccess?.()
     } catch (err) {
-      setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.')
-      throw err
+      const axiosError = err as AxiosError<ApiErrorResponse>
+      const errorMessage =
+        axiosError.response?.data?.message ||
+        '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.'
+      setError(errorMessage)
     } finally {
       setIsLoading(false)
     }

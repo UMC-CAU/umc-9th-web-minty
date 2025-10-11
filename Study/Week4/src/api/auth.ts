@@ -1,5 +1,10 @@
 import axiosInstance from './axios'
 import type { LoginRequest, LoginResponse, SignupRequest, SignupResponse } from '../types/auth'
+import type {
+  ApiResponse,
+  ProtectedResponse,
+  RefreshTokenData,
+} from '../types/api'
 
 export const login = async (credentials: LoginRequest): Promise<LoginResponse> => {
   const response = await axiosInstance.post<LoginResponse>('/v1/auth/signin', credentials)
@@ -8,5 +13,25 @@ export const login = async (credentials: LoginRequest): Promise<LoginResponse> =
 
 export const signup = async (data: SignupRequest): Promise<SignupResponse> => {
   const response = await axiosInstance.post<SignupResponse>('/v1/auth/signup', data)
+  return response.data
+}
+
+export const checkProtected = async (): Promise<ProtectedResponse> => {
+  const response = await axiosInstance.get<ProtectedResponse>('/v1/auth/protected')
+  return response.data
+}
+
+export const refreshToken = async (
+  refreshTokenValue: string
+): Promise<ApiResponse<RefreshTokenData>> => {
+  const response = await axiosInstance.post<ApiResponse<RefreshTokenData>>(
+    '/v1/auth/refresh',
+    { refresh: refreshTokenValue }
+  )
+  return response.data
+}
+
+export const signout = async (): Promise<ApiResponse> => {
+  const response = await axiosInstance.post<ApiResponse>('/v1/auth/signout')
   return response.data
 }

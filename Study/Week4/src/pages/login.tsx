@@ -1,33 +1,29 @@
 import { useNavigate } from 'react-router-dom'
-import { useForm } from '../hooks/useForm'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useLogin } from '../hooks/useLogin'
-import { validateEmail, validatePassword } from '../utils/validators'
+import { loginSchema, type LoginFormData } from '../schemas/auth.schema'
 import Input from '../components/Input'
 import GoogleLoginButton from '../components/GoogleLoginButton'
 import SubmitButton from '../components/SubmitButton'
-import { FormProvider } from '../contexts/FormContext'
 
 function Login() {
-  const formContext = useForm({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-    validators: {
-      email: validateEmail,
-      password: validatePassword,
-    },
-  })
-  const { values, isValid } = formContext
-  const { loginMutation, error, isLoading } = useLogin()
   const navigate = useNavigate()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onChange',
+  })
+  const { loginMutation, error, isLoading } = useLogin(() => {
+    // 로그인 성공 시 Header 리렌더링
+    navigate(0) // 새로고침
+  })
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    await loginMutation({
-      email: values.email,
-      password: values.password,
-    })
+  const onSubmit = async (data: LoginFormData) => {
+    await loginMutation(data)
   }
 
   const handleGoogleLogin = () => {
@@ -58,22 +54,20 @@ function Login() {
           <hr className="flex-1 border-gray-700" />
         </div>
 
-        <FormProvider value={formContext}>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg text-sm">
-                {error}
-              </div>
-            )}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {error && (
+            <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
 
-            <Input type="email" name="email" />
-            <Input type="password" name="password" />
+          <Input type="email" {...register('email')} error={errors.email} />
+          <Input type="password" {...register('password')} error={errors.password} />
 
-            <SubmitButton disabled={!isValid} isLoading={isLoading}>
-              {isLoading ? '로그인 중...' : '로그인'}
-            </SubmitButton>
-          </form>
-        </FormProvider>
+          <SubmitButton disabled={!isValid} isLoading={isLoading}>
+            {isLoading ? '로그인 중...' : '로그인'}
+          </SubmitButton>
+        </form>
       </section>
     </main>
   )
