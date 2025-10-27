@@ -18,8 +18,8 @@ function Login() {
     mode: 'onChange',
   })
   const { loginMutation, error, isLoading } = useLogin(() => {
-    // 로그인 성공 시 Header 리렌더링
-    navigate(0) // 새로고침
+    // 로그인 성공 시 마이페이지로 이동
+    navigate('/mypage')
   })
 
   const onSubmit = async (data: LoginFormData) => {

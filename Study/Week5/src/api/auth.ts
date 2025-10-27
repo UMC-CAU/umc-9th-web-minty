@@ -4,6 +4,7 @@ import type {
   ApiResponse,
   ProtectedResponse,
   RefreshTokenData,
+  UserData,
 } from '../types/api'
 
 export const login = async (credentials: LoginRequest): Promise<LoginResponse> => {
@@ -33,5 +34,10 @@ export const refreshToken = async (
 
 export const signout = async (): Promise<ApiResponse> => {
   const response = await axiosInstance.post<ApiResponse>('/v1/auth/signout')
+  return response.data
+}
+
+export const getMyInfo = async (): Promise<ApiResponse<UserData>> => {
+  const response = await axiosInstance.get<ApiResponse<UserData>>('/v1/users/me')
   return response.data
 }

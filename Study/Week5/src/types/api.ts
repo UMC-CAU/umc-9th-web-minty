@@ -29,3 +29,14 @@ export interface RefreshTokenData {
 
 // Protected 응답 타입
 export type ProtectedResponse = ApiResponse<string>
+
+// 유저 정보 데이터 타입
+export interface UserData {
+  id: number
+  name: string
+  email: string
+  bio: string | null
+  avatar: string | null
+  createdAt: string
+  updatedAt: string
+}

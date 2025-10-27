@@ -16,12 +16,10 @@ function Header() {
 
   useEffect(() => {
     // 로그인/회원가입 페이지에서는 체크하지 않음
-    /*일단은 다른 페이지가 없어서..
     if (location.pathname === '/login' || location.pathname === '/signup') {
       setIsLoggedIn(false)
       return
     }
-    */
     const checkAuth = async () => {
       if (!isAuthenticated()) {
         setIsLoggedIn(false)
@@ -63,7 +61,9 @@ function Header() {
         <nav className="flex justify-end items-center h-16 gap-4">
           {isLoggedIn ? (
             <>
-              <span className="text-green-500 px-4 py-2">로그인됨</span>
+              <Link to="/mypage" className={getButtonClassName('/mypage')}>
+                마이페이지
+              </Link>
               <button
                 onClick={handleLogout}
                 className={`${buttonStyles.base} ${buttonStyles.inactive}`}
