@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const GOOGLE_LOGIN_URL = 'https://umc-web.kyeoungwoon.kr/v1/auth/google/login'
+const GOOGLE_LOGIN_URL = 'http://localhost:8000/v1/auth/google/login'
 
 export function useGoogleLogin() {
   const [error, setError] = useState('')
