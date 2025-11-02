@@ -4,7 +4,7 @@ import { EnvelopeIcon } from '@heroicons/react/24/outline'
 function MyPage() {
   const { data: user, error, isLoading } = useUserInfo()
 
-  // 날짜 포맷팅 함수
+  // 날짜 포맷팅
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
     const year = date.getFullYear()
@@ -13,7 +13,7 @@ function MyPage() {
     return `${year}년 ${month}월 ${day}일`
   }
 
-  // 아바타 또는 이니셜 렌더링
+  // 아바타/이니셜 렌더링
   const renderAvatar = () => {
     if (user?.avatar) {
       return (
@@ -24,7 +24,7 @@ function MyPage() {
         />
       )
     }
-    // 아바타가 없으면 이름의 첫 글자 표시
+    // 아바타가 없으면 이름 사용
     return (
       <div className="w-24 h-24 rounded-full bg-blue-600 flex items-center justify-center">
         <span className="text-white text-3xl font-bold">
@@ -57,7 +57,6 @@ function MyPage() {
 
           {!isLoading && !error && user && (
             <div className="space-y-8">
-              {/* 프로필 섹션 */}
               <section className="flex items-center gap-6 pb-8 border-b border-gray-800">
                 <figure className="m-0">
                   {renderAvatar()}
@@ -72,8 +71,6 @@ function MyPage() {
                   </address>
                 </div>
               </section>
-
-              {/* 상세 정보 */}
               <dl className="space-y-4">
                 <div>
                   <dt className="text-gray-400 text-sm font-medium mb-2">소개</dt>

@@ -1,7 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useState, useEffect } from 'react'
 import { useLogin } from '../hooks/useLogin'
+import { useGoogleLogin } from '../hooks/useGoogleLogin'
+import { getLastLoginMethod } from '../utils/token'
 import { loginSchema, type LoginFormData } from '../schemas/auth.schema'
 import Input from '../components/Input'
 import GoogleLoginButton from '../components/GoogleLoginButton'
@@ -9,6 +12,8 @@ import SubmitButton from '../components/SubmitButton'
 
 function Login() {
   const navigate = useNavigate()
+  const [lastLoginMethod, setLastLoginMethodState] = useState<string | null>(null)
+
   const {
     register,
     handleSubmit,
@@ -17,17 +22,26 @@ function Login() {
     resolver: zodResolver(loginSchema),
     mode: 'onChange',
   })
+
   const { loginMutation, error, isLoading } = useLogin(() => {
     // 로그인 성공 시 마이페이지로 이동
     navigate('/mypage')
   })
+
+  const { initiateGoogleLogin, error: googleError } = useGoogleLogin()
+
+  useEffect(() => {
+    // 마지막 로그인 방법 확인
+    const lastMethod = getLastLoginMethod()
+    setLastLoginMethodState(lastMethod)
+  }, [])
 
   const onSubmit = async (data: LoginFormData) => {
     await loginMutation(data)
   }
 
   const handleGoogleLogin = () => {
-    console.log('Google login clicked')
+    initiateGoogleLogin()
   }
 
   return (
@@ -46,7 +60,16 @@ function Login() {
           </h1>
         </header>
 
-        <GoogleLoginButton onClick={handleGoogleLogin} />
+        {googleError && (
+          <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg text-sm mb-4">
+            {googleError}
+          </div>
+        )}
+
+        <GoogleLoginButton
+          onClick={handleGoogleLogin}
+          showLastUsed={lastLoginMethod === 'google'}
+        />
 
         <div className="flex items-center gap-4 my-6" role="separator">
           <hr className="flex-1 border-gray-700" />
@@ -55,6 +78,14 @@ function Login() {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {lastLoginMethod === 'email' && (
+            <div className="flex justify-center mb-2">
+              <span className="text-xs border border-blue-400/60 text-blue-400 px-1.5 py-0.5 rounded-md">
+                최근사용
+              </span>
+            </div>
+          )}
+
           {error && (
             <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg text-sm">
               {error}

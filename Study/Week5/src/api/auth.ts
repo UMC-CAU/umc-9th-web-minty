@@ -1,5 +1,10 @@
 import axiosInstance from './axios'
-import type { LoginRequest, LoginResponse, SignupRequest, SignupResponse } from '../types/auth'
+import type {
+  LoginRequest,
+  LoginResponse,
+  SignupRequest,
+  SignupResponse,
+} from '../types/auth'
 import type {
   ApiResponse,
   ProtectedResponse,

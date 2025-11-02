@@ -1,5 +1,8 @@
 const ACCESS_TOKEN_KEY = 'accessToken'
 const REFRESH_TOKEN_KEY = 'refreshToken'
+const LAST_LOGIN_METHOD_KEY = 'lastLoginMethod'
+
+export type LoginMethod = 'email' | 'google'
 
 // Access Token Get
 export const getAccessToken = (): string | null => {
@@ -46,4 +49,20 @@ export const removeTokens = (): void => {
 // 로그인 여부 확인
 export const isAuthenticated = (): boolean => {
   return !!getAccessToken()
+}
+
+// 마지막 로그인 방법 가져오기
+export const getLastLoginMethod = (): LoginMethod | null => {
+  const method = localStorage.getItem(LAST_LOGIN_METHOD_KEY)
+  return method as LoginMethod | null
+}
+
+// 마지막 로그인 방법 저장
+export const setLastLoginMethod = (method: LoginMethod): void => {
+  localStorage.setItem(LAST_LOGIN_METHOD_KEY, method)
+}
+
+// 마지막 로그인 방법 제거
+export const clearLastLoginMethod = (): void => {
+  localStorage.removeItem(LAST_LOGIN_METHOD_KEY)
 }

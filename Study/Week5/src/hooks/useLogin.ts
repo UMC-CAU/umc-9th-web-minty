@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { AxiosError } from 'axios'
 import { login } from '../api/auth'
-import { setTokens } from '../utils/token'
+import { setTokens, setLastLoginMethod } from '../utils/token'
 import type { LoginRequest } from '../types/auth'
 import type { ApiErrorResponse } from '../types/api'
 
@@ -17,6 +17,7 @@ export function useLogin(onSuccess?: () => void) {
       const response = await login(credentials)
 
       setTokens(response.data.accessToken, response.data.refreshToken)
+      setLastLoginMethod('email')
 
       onSuccess?.()
     } catch (err) {

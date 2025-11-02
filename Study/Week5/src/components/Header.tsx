@@ -30,6 +30,7 @@ function Header() {
         await checkProtected()
         setIsLoggedIn(true)
       } catch (error) {
+        console.error('Auth check failed:', error)
         setIsLoggedIn(false)
       }
     }

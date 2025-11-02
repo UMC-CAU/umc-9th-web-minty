@@ -3,6 +3,7 @@ import Header from './components/Header'
 import Login from './pages/login'
 import Signup from './pages/signup'
 import MyPage from './pages/mypage'
+import GoogleCallback from './pages/google-callback'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
           {/* PUBLIC */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/v1/auth/google/callback" element={<GoogleCallback />} />
 
           {/* PROTECTED */}
           <Route
