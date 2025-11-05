@@ -1,8 +1,8 @@
-import { useUserInfo } from '../hooks/useUserInfo'
+import { useAuth } from '../contexts/AuthContext'
 import { EnvelopeIcon } from '@heroicons/react/24/outline'
 
 function MyPage() {
-  const { data: user, error, isLoading } = useUserInfo()
+  const { user, isLoading } = useAuth()
 
   // 날짜 포맷팅
   const formatDate = (dateString: string) => {
@@ -49,13 +49,7 @@ function MyPage() {
             </div>
           )}
 
-          {error && (
-            <div role="alert" className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg">
-              {error}
-            </div>
-          )}
-
-          {!isLoading && !error && user && (
+          {!isLoading && user && (
             <div className="space-y-8">
               <section className="flex items-center gap-6 pb-8 border-b border-gray-800">
                 <figure className="m-0">

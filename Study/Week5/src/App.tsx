@@ -1,36 +1,17 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import Header from './components/Header'
-import Login from './pages/login'
-import Signup from './pages/signup'
-import MyPage from './pages/mypage'
-import GoogleCallback from './pages/google-callback'
-import ProtectedRoute from './components/ProtectedRoute'
+import { BrowserRouter as Router, useRoutes } from 'react-router-dom'
+import { AuthProvider } from './contexts/AuthContext'
+import { routes } from './routes'
+
+function AppRoutes() {
+  return useRoutes(routes)
+}
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-black">
-        <Header />
-        <Routes>
-          {/* PUBLIC */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/v1/auth/google/callback" element={<GoogleCallback />} />
-
-          {/* PROTECTED */}
-          <Route
-            path="/mypage"
-            element={
-              <ProtectedRoute>
-                <MyPage />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* 기본 */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
-        </Routes>
-      </div>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </Router>
   )
 }

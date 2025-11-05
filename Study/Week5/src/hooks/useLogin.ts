@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { AxiosError } from 'axios'
 import { login } from '../api/auth'
-import { setTokens, setLastLoginMethod } from '../utils/token'
+import { useAuth } from '../contexts/AuthContext'
 import type { LoginRequest } from '../types/auth'
 import type { ApiErrorResponse } from '../types/api'
 
 export function useLogin(onSuccess?: () => void) {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const { login: contextLogin } = useAuth()
 
   const loginMutation = async (credentials: LoginRequest) => {
     setError('')
@@ -16,8 +17,7 @@ export function useLogin(onSuccess?: () => void) {
     try {
       const response = await login(credentials)
 
-      setTokens(response.data.accessToken, response.data.refreshToken)
-      setLastLoginMethod('email')
+      await contextLogin(response.data.accessToken, response.data.refreshToken, 'email')
 
       onSuccess?.()
     } catch (err) {

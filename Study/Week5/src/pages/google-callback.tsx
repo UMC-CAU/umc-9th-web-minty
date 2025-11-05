@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { setTokens, setLastLoginMethod } from '../utils/token'
+import { useAuth } from '../contexts/AuthContext'
 
 function GoogleCallback() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [error, setError] = useState<string | null>(null)
+  const { login } = useAuth()
 
   useEffect(() => {
-    const processCallback = () => {
+    const processCallback = async () => {
       const accessToken = searchParams.get('accessToken')
       const refreshToken = searchParams.get('refreshToken')
 
@@ -19,9 +20,8 @@ function GoogleCallback() {
       }
 
       try {
-        setTokens(accessToken, refreshToken || '')
 
-        setLastLoginMethod('google')
+        await login(accessToken, refreshToken || '', 'google')
 
         window.history.replaceState({}, '', '/mypage')
 
