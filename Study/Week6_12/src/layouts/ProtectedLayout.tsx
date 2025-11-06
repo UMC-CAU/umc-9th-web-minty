@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import Sidebar from '../components/Sidebar'
 
 export default function ProtectedLayout() {
   const { isAuthenticated, isLoading } = useAuth()
@@ -16,5 +17,12 @@ export default function ProtectedLayout() {
     return <Navigate to="/login" replace />
   }
 
-  return <Outlet />
+  return (
+    <div className="flex">
+      <Sidebar />
+      <main className="flex-1 bg-black">
+        <Outlet />
+      </main>
+    </div>
+  )
 }

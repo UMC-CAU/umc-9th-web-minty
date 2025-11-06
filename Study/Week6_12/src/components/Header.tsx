@@ -9,7 +9,7 @@ const buttonStyles = {
 
 function Header() {
   const location = useLocation()
-  const { isAuthenticated, logout } = useAuth()
+  const { isAuthenticated, user, logout } = useAuth()
 
   const getButtonClassName = (path: string) => {
     const isActive = location.pathname === path
@@ -22,9 +22,9 @@ function Header() {
         <nav className="flex justify-end items-center h-16 gap-4">
           {isAuthenticated ? (
             <>
-              <Link to="/mypage" className={getButtonClassName('/mypage')}>
-                마이페이지
-              </Link>
+              <span className="text-white">
+                {user?.name}님 반갑습니다
+              </span>
               <button
                 onClick={logout}
                 className={`${buttonStyles.base} ${buttonStyles.inactive}`}
