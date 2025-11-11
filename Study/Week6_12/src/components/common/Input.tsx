@@ -1,9 +1,9 @@
 import { forwardRef, useState } from 'react'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
-import type { FieldError } from 'react-hook-form'
 
 type BaseInputProps = {
-  error?: FieldError
+  label?: string
+  error?: string
   'aria-label'?: string
 }
 
@@ -13,8 +13,8 @@ type EmailPasswordInputProps = BaseInputProps & {
 }
 
 type TextInputProps = BaseInputProps & {
-  type: 'text'
-  placeholder: string
+  type: 'text' | 'url'
+  placeholder?: string
 }
 
 type InputProps = (EmailPasswordInputProps | TextInputProps) &
@@ -34,6 +34,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const [showPassword, setShowPassword] = useState(false)
   const {
     type,
+    label,
     error,
     placeholder: propPlaceholder,
     'aria-label': ariaLabel,
@@ -52,11 +53,24 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   return (
     <div>
+      {label && (
+        <label
+          htmlFor={rest.id || rest.name}
+          className="block text-sm font-medium text-gray-200 mb-2"
+        >
+          {label}
+        </label>
+      )}
       <div className="relative">
         <input
           type={inputType}
           ref={ref}
-          className="w-full px-4 py-3.5 bg-gray-900 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors"
+          id={rest.id || rest.name}
+          className={`w-full px-4 py-3.5 bg-gray-900 border rounded-lg text-white placeholder-gray-500 focus:outline-none transition-colors ${
+            error
+              ? 'border-red-500 focus:border-red-500'
+              : 'border-gray-800 focus:border-gray-600'
+          }`}
           placeholder={placeholder}
           aria-label={computedAriaLabel}
           aria-invalid={!!error}
@@ -80,7 +94,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       </div>
       {error && (
         <p id={`${rest.name}-error`} className="text-red-500 text-sm mt-1" role="alert">
-          {error.message}
+          {error}
         </p>
       )}
     </div>

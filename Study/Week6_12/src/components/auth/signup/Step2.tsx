@@ -1,7 +1,7 @@
 import { type UseFormRegister, type FieldErrors } from 'react-hook-form'
-import type { SignupFormData } from '../../schemas/auth.schema'
-import Input from '../Input'
-import SubmitButton from '../SubmitButton'
+import type { SignupFormData } from '../../../schemas/auth.schema'
+import Input from '../../common/Input'
+import SubmitButton from '../../common/SubmitButton'
 
 interface Step2Props {
   email: string

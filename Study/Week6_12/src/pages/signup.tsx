@@ -7,9 +7,9 @@ import {
   signupSchema,
   type SignupFormData,
 } from '../schemas/auth.schema'
-import Step1 from '../components/signup/Step1'
-import Step2 from '../components/signup/Step2'
-import Step3 from '../components/signup/Step3'
+import Step1 from '../components/auth/signup/Step1'
+import Step2 from '../components/auth/signup/Step2'
+import Step3 from '../components/auth/signup/Step3'
 
 function Signup() {
   const navigate = useNavigate()

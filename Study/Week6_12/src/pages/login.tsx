@@ -1,18 +1,27 @@
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useLogin } from '../hooks/useLogin'
 import { useGoogleLogin } from '../hooks/useGoogleLogin'
+import { useAuth } from '../contexts/AuthContext'
 import { getLastLoginMethod } from '../utils/token'
 import { loginSchema, type LoginFormData } from '../schemas/auth.schema'
-import Input from '../components/Input'
-import GoogleLoginButton from '../components/GoogleLoginButton'
-import SubmitButton from '../components/SubmitButton'
+import Input from '../components/common/Input'
+import GoogleLoginButton from '../components/auth/GoogleLoginButton'
+import SubmitButton from '../components/common/SubmitButton'
 
 function Login() {
   const navigate = useNavigate()
   const [lastLoginMethod, setLastLoginMethodState] = useState<string | null>(null)
+  const [loginSuccess, setLoginSuccess] = useState(false)
+  const { isAuthenticated } = useAuth()
+  const hasNavigated = useRef(false)
+
+  // localStorage에서 원래 경로 가져오기
+  const from = localStorage.getItem('redirect_from') || '/'
+
+  console.log('[Login] redirect from localStorage:', from)
 
   const {
     register,
@@ -24,8 +33,9 @@ function Login() {
   })
 
   const { loginMutation, error, isLoading } = useLogin(() => {
-    // 로그인 성공 시 마이페이지로 이동
-    navigate('/mypage')
+    // 로그인 성공 시 플래그 설정
+    console.log('[Login] Login successful, waiting for auth state update...')
+    setLoginSuccess(true)
   })
 
   const { initiateGoogleLogin, error: googleError } = useGoogleLogin()
@@ -36,12 +46,23 @@ function Login() {
     setLastLoginMethodState(lastMethod)
   }, [])
 
+  // 로그인 성공 후 navigate
+  useEffect(() => {
+    if (loginSuccess && isAuthenticated && !hasNavigated.current) {
+      hasNavigated.current = true
+      console.log('[Login] Auth state updated, navigating to:', from)
+      navigate(from, { replace: true })
+      localStorage.removeItem('redirect_from')
+    }
+  }, [loginSuccess, isAuthenticated, navigate, from])
+
   const onSubmit = async (data: LoginFormData) => {
     await loginMutation(data)
   }
 
   const handleGoogleLogin = () => {
-    initiateGoogleLogin()
+
+    initiateGoogleLogin(from)
   }
 
   return (
@@ -92,8 +113,8 @@ function Login() {
             </div>
           )}
 
-          <Input type="email" {...register('email')} error={errors.email} />
-          <Input type="password" {...register('password')} error={errors.password} />
+          <Input type="email" {...register('email')} error={errors.email?.message} />
+          <Input type="password" {...register('password')} error={errors.password?.message} />
 
           <SubmitButton disabled={!isValid} isLoading={isLoading}>
             {isLoading ? '로그인 중...' : '로그인'}

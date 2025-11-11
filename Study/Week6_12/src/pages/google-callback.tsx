@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 
@@ -6,7 +6,12 @@ function GoogleCallback() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [error, setError] = useState<string | null>(null)
-  const { login } = useAuth()
+  const [loginSuccess, setLoginSuccess] = useState(false)
+  const { login, isAuthenticated } = useAuth()
+  const hasNavigated = useRef(false)
+
+  // localStorage에서 원래 경로 가져오기
+  const from = localStorage.getItem('oauth_redirect_from') || '/'
 
   useEffect(() => {
     const processCallback = async () => {
@@ -20,12 +25,10 @@ function GoogleCallback() {
       }
 
       try {
-
+        console.log('[GoogleCallback] Starting login process...')
         await login(accessToken, refreshToken || '', 'google')
-
-        window.history.replaceState({}, '', '/mypage')
-
-        navigate('/mypage', { replace: true })
+        console.log('[GoogleCallback] Login successful, waiting for auth state update...')
+        setLoginSuccess(true)
       } catch (err) {
         console.error('Google login failed:', err)
         setError('구글 로그인에 실패했습니다.')
@@ -36,6 +39,20 @@ function GoogleCallback() {
     processCallback()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // 로그인 성공 후 navigate
+  useEffect(() => {
+    if (loginSuccess && isAuthenticated && !hasNavigated.current) {
+      hasNavigated.current = true
+      console.log('[GoogleCallback] Auth state updated, navigating to:', from)
+
+      // localStorage 정리
+      localStorage.removeItem('oauth_redirect_from')
+      window.history.replaceState({}, '', from)
+
+      navigate(from, { replace: true })
+    }
+  }, [loginSuccess, isAuthenticated, navigate, from])
 
   return (
     <main className="min-h-[calc(100vh-4rem)] bg-black px-6 py-8 flex items-center justify-center">

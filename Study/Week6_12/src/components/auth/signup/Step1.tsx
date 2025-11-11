@@ -1,8 +1,8 @@
 import { type UseFormRegister, type FieldErrors } from 'react-hook-form'
-import type { SignupFormData } from '../../schemas/auth.schema'
-import Input from '../Input'
+import type { SignupFormData } from '../../../schemas/auth.schema'
+import Input from '../../common/Input'
 import GoogleLoginButton from '../GoogleLoginButton'
-import SubmitButton from '../SubmitButton'
+import SubmitButton from '../../common/SubmitButton'
 
 interface Step1Props {
   onNext: (e: React.FormEvent) => void

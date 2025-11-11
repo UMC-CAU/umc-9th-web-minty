@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
+import { SidebarProvider } from './contexts/SidebarContext'
 import { routes } from './routes'
 
 function AppRoutes() {
@@ -10,7 +11,9 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <AppRoutes />
+        <SidebarProvider>
+          <AppRoutes />
+        </SidebarProvider>
       </AuthProvider>
     </Router>
   )

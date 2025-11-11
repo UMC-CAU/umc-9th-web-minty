@@ -59,8 +59,8 @@ axiosInstance.interceptors.response.use(
       }
 
       if (originalRequest.url?.includes('/v1/auth/refresh')) {
+        console.log('[axios] Refresh API failed, removing tokens')
         removeTokens()
-        window.location.href = '/login'
         return Promise.reject(error)
       }
 
@@ -85,8 +85,8 @@ axiosInstance.interceptors.response.use(
       const refreshToken = getRefreshToken()
 
       if (!refreshToken) {
+        console.log('[axios] No refresh token, removing tokens')
         removeTokens()
-        window.location.href = '/login'
         return Promise.reject(error)
       }
 
@@ -107,9 +107,9 @@ axiosInstance.interceptors.response.use(
 
         return axiosInstance(originalRequest)
       } catch (refreshError) {
+        console.log('[axios] Token refresh failed, removing tokens')
         processQueue(refreshError, null)
         removeTokens()
-        window.location.href = '/login'
         return Promise.reject(refreshError)
       } finally {
         isRefreshing = false
