@@ -53,7 +53,7 @@ const CommentList = ({ lpId }: CommentListProps) => {
         댓글 {comments.length > 0 && `(${comments.length})`}
       </h2>
 
-      <CommentInput />
+      <CommentInput lpId={lpId} />
 
       {isError && (
         <ErrorMessage message="댓글을 불러올 수 없습니다." />
@@ -71,7 +71,7 @@ const CommentList = ({ lpId }: CommentListProps) => {
         <>
           <div className="space-y-0">
             {comments.map((comment) => (
-              <CommentItem key={comment.id} comment={comment} />
+              <CommentItem key={comment.id} comment={comment} lpId={lpId} />
             ))}
           </div>
 

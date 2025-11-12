@@ -1,4 +1,12 @@
-import type { CommentListResponse, GetCommentsParams } from '../types/comment'
+import type {
+  CommentListResponse,
+  GetCommentsParams,
+  CreateCommentRequest,
+  CreateCommentResponse,
+  UpdateCommentRequest,
+  UpdateCommentResponse,
+  DeleteCommentResponse,
+} from '../types/comment'
 import axiosInstance from './axios'
 
 export const getComments = async (
@@ -10,6 +18,38 @@ export const getComments = async (
     {
       params: { cursor, limit, order },
     }
+  )
+  return response.data
+}
+
+export const createComment = async (
+  data: CreateCommentRequest
+): Promise<CreateCommentResponse> => {
+  const { lpId, content } = data
+  const response = await axiosInstance.post<CreateCommentResponse>(
+    `/v1/lps/${lpId}/comments`,
+    { content }
+  )
+  return response.data
+}
+
+export const updateComment = async (
+  data: UpdateCommentRequest
+): Promise<UpdateCommentResponse> => {
+  const { lpId, commentId, content } = data
+  const response = await axiosInstance.patch<UpdateCommentResponse>(
+    `/v1/lps/${lpId}/comments/${commentId}`,
+    { content }
+  )
+  return response.data
+}
+
+export const deleteComment = async (
+  lpId: number,
+  commentId: number
+): Promise<DeleteCommentResponse> => {
+  const response = await axiosInstance.delete<DeleteCommentResponse>(
+    `/v1/lps/${lpId}/comments/${commentId}`
   )
   return response.data
 }
