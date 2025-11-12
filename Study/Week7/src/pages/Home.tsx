@@ -1,13 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router'
 import { useLpsInfinite } from '../hooks/useLpsInfinite'
 import LpCard from '../components/lp/LpCard'
 import LpCardSkeleton from '../components/lp/LpCardSkeleton'
 import ErrorMessage from '../components/common/ErrorMessage'
 import CreateLpButton from '../components/lp/CreateLpButton'
+import CreateLpModal from '../components/lp/CreateLpModal'
 import { UI } from '../constants'
 
 export default function Home() {
+  const navigate = useNavigate()
   const [order, setOrder] = useState<'asc' | 'desc'>('desc')
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useLpsInfinite({ order })
@@ -116,7 +120,15 @@ export default function Home() {
         </>
       )}
 
-      <CreateLpButton />
+      <CreateLpButton onClick={() => setIsModalOpen(true)} />
+
+      <CreateLpModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={(lpId) => {
+          navigate(`/lp/${lpId}`)
+        }}
+      />
     </div>
   )
 }

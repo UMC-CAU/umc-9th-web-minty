@@ -7,7 +7,6 @@ import MyPage from '../pages/mypage'
 import GoogleCallback from '../pages/google-callback'
 import Home from '../pages/Home'
 import LpDetail from '../pages/LpDetail'
-import CreateLp from '../pages/CreateLp'
 
 export const routes: RouteObject[] = [
   {
@@ -39,10 +38,6 @@ export const routes: RouteObject[] = [
           {
             path: 'mypage',
             element: <MyPage />,
-          },
-          {
-            path: 'lp/create',
-            element: <CreateLp />,
           },
           {
             path: 'lp/:lpId',
