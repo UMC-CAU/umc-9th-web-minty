@@ -46,3 +46,12 @@ export const getMyInfo = async (): Promise<ApiResponse<UserData>> => {
   const response = await axiosInstance.get<ApiResponse<UserData>>('/v1/users/me')
   return response.data
 }
+
+export const updateMyInfo = async (data: {
+  name: string
+  bio?: string
+  avatar?: string
+}): Promise<ApiResponse<UserData>> => {
+  const response = await axiosInstance.patch<ApiResponse<UserData>>('/v1/users', data)
+  return response.data
+}

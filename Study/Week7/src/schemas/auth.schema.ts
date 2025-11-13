@@ -13,6 +13,21 @@ export const nameSchema = z
   .string()
   .min(1, '이름을 입력해주세요.')
 
+// 자기소개
+export const bioSchema = z
+  .string()
+  .max(300, '자기소개는 최대 300자까지 입력 가능합니다.')
+  .optional()
+
+// 아바타
+export const avatarSchema = z
+  .string()
+  .optional()
+  .refine(
+    (val) => !val || val === '' || z.string().url().safeParse(val).success,
+    { message: '유효한 URL을 입력해주세요.' }
+  )
+
 // 로그인
 export const loginSchema = z.object({
   email: emailSchema,
@@ -54,8 +69,16 @@ export const signupSchema = z.object({
   name: nameSchema,
 })
 
+// 프로필 수정
+export const updateProfileSchema = z.object({
+  name: nameSchema,
+  bio: bioSchema,
+  avatar: avatarSchema,
+})
+
 export type LoginFormData = z.infer<typeof loginSchema>
 export type SignupFormData = z.infer<typeof signupSchema>
 export type SignupStep1Data = z.infer<typeof signupStep1Schema>
 export type SignupStep2Data = z.infer<typeof signupStep2Schema>
 export type SignupStep3Data = z.infer<typeof signupStep3Schema>
+export type UpdateProfileFormData = z.infer<typeof updateProfileSchema>
