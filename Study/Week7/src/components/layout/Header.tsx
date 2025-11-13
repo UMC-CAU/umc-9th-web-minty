@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { Bars3Icon } from '@heroicons/react/24/outline'
 import { useAuth } from '../../contexts/AuthContext'
 import { useSidebar } from '../../contexts/SidebarContext'
+import { useLogout } from '../../hooks/useLogout'
 
 const buttonStyles = {
   base: 'px-4 py-2 rounded-lg transition-colors',
@@ -11,8 +12,9 @@ const buttonStyles = {
 
 function Header() {
   const location = useLocation()
-  const { isAuthenticated, user, logout } = useAuth()
+  const { isAuthenticated, user } = useAuth()
   const sidebar = useSidebar()
+  const { mutate: logout } = useLogout()
 
   const getButtonClassName = (path: string) => {
     const isActive = location.pathname === path
@@ -43,7 +45,7 @@ function Header() {
                   {user?.name}님 반갑습니다
                 </span>
                 <button
-                  onClick={logout}
+                  onClick={() => logout()}
                   className={`${buttonStyles.base} ${buttonStyles.inactive}`}
                 >
                   로그아웃

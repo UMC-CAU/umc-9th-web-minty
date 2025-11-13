@@ -7,7 +7,7 @@ function GoogleCallback() {
   const [searchParams] = useSearchParams()
   const [error, setError] = useState<string | null>(null)
   const [loginSuccess, setLoginSuccess] = useState(false)
-  const { login, isAuthenticated } = useAuth()
+  const { setAuthState, isAuthenticated } = useAuth()
   const hasNavigated = useRef(false)
 
   // localStorage에서 원래 경로 가져오기
@@ -26,7 +26,7 @@ function GoogleCallback() {
 
       try {
         console.log('[GoogleCallback] Starting login process...')
-        await login(accessToken, refreshToken || '', 'google')
+        await setAuthState(accessToken, refreshToken || '', 'google')
         console.log('[GoogleCallback] Login successful, waiting for auth state update...')
         setLoginSuccess(true)
       } catch (err) {

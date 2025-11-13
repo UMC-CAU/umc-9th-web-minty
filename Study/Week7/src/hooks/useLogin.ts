@@ -6,12 +6,12 @@ import type { LoginRequest } from '../types/auth'
 import type { ApiErrorResponse } from '../types/api'
 
 export function useLogin(onSuccess?: () => void) {
-  const { login: contextLogin } = useAuth()
+  const { setAuthState } = useAuth()
 
   const mutation = useMutation({
     mutationFn: async (credentials: LoginRequest) => {
       const response = await login(credentials)
-      await contextLogin(response.data.accessToken, response.data.refreshToken, 'email')
+      await setAuthState(response.data.accessToken, response.data.refreshToken, 'email')
       return response
     },
     onSuccess: () => {

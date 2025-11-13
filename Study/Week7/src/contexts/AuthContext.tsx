@@ -8,14 +8,12 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getMyInfo, signout } from '../api/auth'
+import { getMyInfo } from '../api/auth'
 import {
   getAccessToken,
   setTokens,
   removeTokens,
   setLastLoginMethod,
-  clearLastLoginMethod,
   type LoginMethod,
 } from '../utils/token'
 import type { UserData } from '../types/api'
@@ -24,8 +22,8 @@ interface AuthContextType {
   isAuthenticated: boolean
   user: UserData | null
   isLoading: boolean
-  login: (accessToken: string, refreshToken: string, method: LoginMethod) => Promise<void>
-  logout: () => Promise<void>
+  setAuthState: (accessToken: string, refreshToken: string, method: LoginMethod) => Promise<void>
+  clearAuthState: () => void
   updateUser: (user: UserData) => void
   isIntentionalLogoutRef: RefObject<boolean>
 }
@@ -36,7 +34,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [user, setUser] = useState<UserData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const navigate = useNavigate()
   const isIntentionalLogoutRef = useRef(false)
 
   useEffect(() => {
@@ -66,12 +63,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   // 로그인
-  const login = async (
+  const setAuthState = async (
     accessToken: string,
     refreshToken: string,
     method: LoginMethod
   ) => {
-    console.log('[AuthContext] login() called with method:', method)
+    console.log('[AuthContext] setAuthState() called with method:', method)
     setTokens(accessToken, refreshToken)
     setLastLoginMethod(method)
 
@@ -83,28 +80,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsAuthenticated(true)
       console.log('[AuthContext] setState called: isAuthenticated=true')
     } catch (error) {
-      console.error('[AuthContext] Login failed:', error)
+      console.error('[AuthContext] setAuthState failed:', error)
       removeTokens()
-      clearLastLoginMethod()
       throw error
     }
   }
 
-  // 로그아웃
-  const logout = async () => {
-    // 의도적인 로그아웃
-    isIntentionalLogoutRef.current = true
-
-    try {
-      await signout()
-    } catch (error) {
-      console.error('Logout API failed:', error)
-    } finally {
-      removeTokens()
-      setIsAuthenticated(false)
-      setUser(null)
-      navigate('/login')
-    }
+  // 로그아웃 상태 초기화
+  const clearAuthState = () => {
+    removeTokens()
+    // LoginMethod 유지
+    setIsAuthenticated(false)
+    setUser(null)
+    isIntentionalLogoutRef.current = false
   }
 
   // 유저 정보 업데이트
@@ -118,8 +106,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthenticated,
         user,
         isLoading,
-        login,
-        logout,
+        setAuthState,
+        clearAuthState,
         updateUser,
         isIntentionalLogoutRef,
       }}
