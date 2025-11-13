@@ -32,7 +32,7 @@ function Login() {
     mode: 'onChange',
   })
 
-  const { loginMutation, error, isLoading } = useLogin(() => {
+  const { mutateAsync, error, isLoading } = useLogin(() => {
     // 로그인 성공 시 플래그 설정
     console.log('[Login] Login successful, waiting for auth state update...')
     setLoginSuccess(true)
@@ -57,7 +57,7 @@ function Login() {
   }, [loginSuccess, isAuthenticated, navigate, from])
 
   const onSubmit = async (data: LoginFormData) => {
-    await loginMutation(data)
+    await mutateAsync(data)
   }
 
   const handleGoogleLogin = () => {
