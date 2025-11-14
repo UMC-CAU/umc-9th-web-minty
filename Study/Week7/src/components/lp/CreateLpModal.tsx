@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AxiosError } from 'axios'
 import { XMarkIcon } from '@heroicons/react/24/solid'
-import { createLpSchema } from '../../schemas/lp.schema'
-import type { CreateLpFormData } from '../../schemas/lp.schema'
+import { lpSchema } from '../../schemas/lp.schema'
+import type { LpFormData } from '../../schemas/lp.schema'
 import type { ApiErrorResponse } from '../../types/api'
 import { useCreateLp } from '../../hooks/useLpMutations'
 import Input from '../common/Input'
@@ -27,8 +27,8 @@ export default function CreateLpModal({ isOpen, onClose, onSuccess }: CreateLpMo
     handleSubmit,
     formState: { errors, isValid },
     reset,
-  } = useForm<CreateLpFormData>({
-    resolver: zodResolver(createLpSchema),
+  } = useForm<LpFormData>({
+    resolver: zodResolver(lpSchema),
     mode: 'onChange',
   })
 
@@ -56,7 +56,7 @@ export default function CreateLpModal({ isOpen, onClose, onSuccess }: CreateLpMo
     onClose()
   }
 
-  const onSubmit = async (data: CreateLpFormData) => {
+  const onSubmit = async (data: LpFormData) => {
     try {
       const response = await createMutation.mutateAsync({
         title: data.title,
