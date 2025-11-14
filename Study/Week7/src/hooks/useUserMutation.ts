@@ -11,18 +11,34 @@ interface UpdateUserData {
 
 export const useUpdateUser = () => {
   const queryClient = useQueryClient()
-  const { updateUser } = useAuth()
+  const { user, updateUser } = useAuth()
 
   return useMutation({
     mutationFn: (data: UpdateUserData) => updateMyInfo(data),
-    onSuccess: (response) => {
+    onMutate: async (variables) => {
+      // 이전 유저 정보 저장
+      const previousUser = user
 
+      // 서버 응답 전에 UI 업데이트
+      if (previousUser) {
+        updateUser({ ...previousUser, ...variables })
+      }
+
+      // 롤백을 위해 이전 상태 반환
+      return { previousUser }
+    },
+    onError: (error, _variables, context) => {
+      // 에러 발생 시 이전 상태로 롤백
+      if (context?.previousUser) {
+        updateUser(context.previousUser)
+      }
+      console.error('Failed to update user:', error)
+    },
+    onSuccess: (response) => {
+      // 서버 응답으로 최종 업데이트
       updateUser(response.data)
 
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.user.me() })
-    },
-    onError: (error) => {
-      console.error('Failed to update user:', error)
     },
   })
 }
