@@ -51,7 +51,7 @@ function Step3({ onSubmit, isValid, error, success, isLoading, register, errors 
           type="text"
           {...register('name')}
           placeholder="닉네임을 입력해주세요"
-          error={errors.name}
+          error={errors.name?.message}
         />
 
         <SubmitButton disabled={!isValid || isLoading || success} variant="primary">

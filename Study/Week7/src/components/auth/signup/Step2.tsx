@@ -17,12 +17,12 @@ function Step2({ email, onNext, isValid, register, errors }: Step2Props) {
       <div className="mb-6 text-gray-400 text-sm">{email}</div>
 
       <form onSubmit={onNext} className="space-y-4">
-        <Input type="password" {...register('password')} error={errors.password} />
+        <Input type="password" {...register('password')} error={errors.password?.message} />
         <Input
           type="password"
           {...register('passwordConfirm')}
           placeholder="비밀번호를 다시 입력해주세요"
-          error={errors.passwordConfirm}
+          error={errors.passwordConfirm?.message}
         />
         <SubmitButton disabled={!isValid}>다음</SubmitButton>
       </form>

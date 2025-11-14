@@ -1,14 +1,20 @@
+import { useState } from 'react'
 import { Link, useLocation } from 'react-router'
 import { useSidebar } from '../../contexts/SidebarContext'
 import {
   HomeIcon,
   MagnifyingGlassIcon,
   UserCircleIcon,
+  TrashIcon,
 } from '@heroicons/react/24/outline'
+import { useWithdraw } from '../../hooks/useWithdraw'
+import ConfirmModal from '../common/ConfirmModal'
 
 export default function Sidebar() {
   const location = useLocation()
   const sidebar = useSidebar()
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false)
+  const { mutate: withdraw } = useWithdraw()
 
   // Context 문제 fallback
   const isOpen = sidebar?.isOpen ?? false
@@ -26,6 +32,19 @@ export default function Sidebar() {
     }`
   }
 
+  const handleWithdrawClick = () => {
+    setIsWithdrawModalOpen(true)
+  }
+
+  const handleWithdrawConfirm = () => {
+    withdraw()
+    setIsWithdrawModalOpen(false)
+  }
+
+  const handleWithdrawCancel = () => {
+    setIsWithdrawModalOpen(false)
+  }
+
   return (
     <>
       {/* 사이드바 백드롭 */}
@@ -40,12 +59,13 @@ export default function Sidebar() {
       <aside
         ref={sidebarRef}
         className={`
-          fixed md:static
+          fixed
           top-0 left-0
+          md:top-16
           w-64
           bg-black
           border-r border-gray-800
-          min-h-screen
+          h-screen md:h-[calc(100vh-4rem)]
           p-4
           flex flex-col
           z-50
@@ -70,7 +90,24 @@ export default function Sidebar() {
             <span>마이페이지</span>
           </Link>
         </nav>
+
+        <div className="flex-1" />
+
+        <button
+          onClick={handleWithdrawClick}
+          className="w-full text-left px-4 py-3 rounded-lg transition-colors duration-200 flex items-center gap-3 text-red-500 hover:bg-red-950 hover:text-red-400"
+        >
+          <TrashIcon className="w-5 h-5" />
+          <span>탈퇴하기</span>
+        </button>
       </aside>
+
+      <ConfirmModal
+        isOpen={isWithdrawModalOpen}
+        message="정말로 탈퇴하시겠습니까? 모든 게시글, 댓글, 좋아요, 사용자 정보가 삭제됩니다."
+        onConfirm={handleWithdrawConfirm}
+        onCancel={handleWithdrawCancel}
+      />
     </>
   )
 }

@@ -55,3 +55,8 @@ export const updateMyInfo = async (data: {
   const response = await axiosInstance.patch<ApiResponse<UserData>>('/v1/users', data)
   return response.data
 }
+
+export const deleteAccount = async (): Promise<ApiResponse> => {
+  const response = await axiosInstance.delete<ApiResponse>('/v1/users')
+  return response.data
+}

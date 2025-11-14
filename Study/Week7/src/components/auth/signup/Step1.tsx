@@ -24,7 +24,7 @@ function Step1({ onNext, isValid, onGoogleLogin, register, errors }: Step1Props)
       </div>
 
       <form onSubmit={onNext} className="space-y-4">
-        <Input type="email" {...register('email')} error={errors.email} />
+        <Input type="email" {...register('email')} error={errors.email?.message} />
         <SubmitButton disabled={!isValid}>다음</SubmitButton>
       </form>
     </>

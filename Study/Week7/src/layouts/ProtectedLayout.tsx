@@ -73,9 +73,9 @@ export default function ProtectedLayout() {
         message="로그인이 필요한 서비스입니다. 로그인을 해주세요"
         onConfirm={handleModalConfirm}
       />
-      <div className="flex">
+      <div className="flex pt-16">
         <Sidebar />
-        <main className="flex-1 bg-black">
+        <main className="flex-1 bg-black md:ml-64">
           <Outlet />
         </main>
       </div>
