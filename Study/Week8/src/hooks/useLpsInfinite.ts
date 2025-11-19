@@ -15,6 +15,9 @@ export const useLpsInfinite = ({
   search,
   limit = PAGINATION.DEFAULT_PAGE_SIZE,
 }: UseLpsInfiniteParams = {}) => {
+
+  const isSearchValid = search === undefined || search.trim().length > 0
+
   return useInfiniteQuery({
     queryKey: QUERY_KEYS.lps.list({ order, search, limit }),
     queryFn: ({ pageParam }) => {
@@ -28,8 +31,10 @@ export const useLpsInfinite = ({
     },
     initialPageParam: undefined as number | undefined,
     getNextPageParam: (lastPage) => {
-
       return lastPage.data.hasNext ? lastPage.data.nextCursor : undefined
     },
+    enabled: isSearchValid,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   })
 }

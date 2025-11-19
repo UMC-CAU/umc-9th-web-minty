@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useLpsInfinite } from '../hooks/useLpsInfinite'
+import { useSearch } from '../hooks/useSearch'
 import LpCard from '../components/lp/LpCard'
 import LpCardSkeleton from '../components/lp/LpCardSkeleton'
 import ErrorMessage from '../components/common/ErrorMessage'
@@ -12,9 +13,14 @@ export default function Home() {
   const navigate = useNavigate()
   const [order, setOrder] = useState<'asc' | 'desc'>('desc')
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { debouncedQuery } = useSearch()
 
+  // 찾기 혹은 정렬.. 둘다 할까 고려중
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useLpsInfinite({ order })
+    useLpsInfinite({
+      order,
+      search: debouncedQuery.trim() || undefined
+    })
 
   //무한 스크롤 Ref
   const sentinelRef = useRef<HTMLDivElement>(null)
@@ -114,7 +120,9 @@ export default function Home() {
 
           {lps.length === 0 && (
             <p className="text-center text-gray-400 mt-8 text-lg">
-              아직 LP가 없습니다.
+              {debouncedQuery.trim()
+                ? `"${debouncedQuery}" 검색 결과가 없습니다.`
+                : '아직 LP가 없습니다.'}
             </p>
           )}
         </>

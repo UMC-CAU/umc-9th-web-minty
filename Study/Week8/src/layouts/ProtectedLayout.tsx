@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { SearchProvider } from '../contexts/SearchContext'
 import Sidebar from '../components/layout/Sidebar'
 import AlertModal from '../components/common/AlertModal'
+import { SearchModal } from '../components/search/SearchModal'
 
 export default function ProtectedLayout() {
   const { isAuthenticated, isLoading, isIntentionalLogoutRef } = useAuth()
@@ -67,18 +69,19 @@ export default function ProtectedLayout() {
   }
 
   return (
-    <>
+    <SearchProvider>
       <AlertModal
         isOpen={showModal}
         message="로그인이 필요한 서비스입니다. 로그인을 해주세요"
         onConfirm={handleModalConfirm}
       />
+      <SearchModal />
       <div className="flex pt-16">
         <Sidebar />
         <main className="flex-1 bg-black md:ml-64">
           <Outlet />
         </main>
       </div>
-    </>
+    </SearchProvider>
   )
 }

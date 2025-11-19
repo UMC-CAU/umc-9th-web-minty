@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router'
 import { useSidebar } from '../../contexts/SidebarContext'
+import { useSearch } from '../../hooks/useSearch'
 import {
   HomeIcon,
   MagnifyingGlassIcon,
@@ -13,6 +14,7 @@ import ConfirmModal from '../common/ConfirmModal'
 export default function Sidebar() {
   const location = useLocation()
   const sidebar = useSidebar()
+  const { openModal } = useSearch()
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false)
   const { mutate: withdraw } = useWithdraw()
 
@@ -20,6 +22,9 @@ export default function Sidebar() {
   const isOpen = sidebar?.isOpen ?? false
   const closeSidebar = sidebar?.closeSidebar ?? (() => {})
   const sidebarRef = sidebar?.sidebarRef
+
+  // 검색은 홈에서만
+  const isHomePage = location.pathname === '/'
 
   const getButtonClassName = (path: string) => {
     const baseClasses =
@@ -80,7 +85,13 @@ export default function Sidebar() {
             <span>홈</span>
           </Link>
 
-          <button className={getButtonClassName('/search')} disabled>
+          <button
+            onClick={openModal}
+            disabled={!isHomePage}
+            className={`${getButtonClassName('/search')} ${
+              !isHomePage ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
             <MagnifyingGlassIcon className="w-5 h-5" />
             <span>찾기</span>
           </button>
