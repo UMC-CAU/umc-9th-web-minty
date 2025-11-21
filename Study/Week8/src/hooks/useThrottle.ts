@@ -8,6 +8,7 @@ function useThrottle<T extends any[]>(
     const lastRun = useRef(Date.now());
     const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const callbackRef = useRef(callback);
+    const argsRef = useRef<T | null>(null);
 
     useEffect(() => {
         callbackRef.current = callback;
@@ -20,11 +21,13 @@ function useThrottle<T extends any[]>(
                 timer.current = null;
             }
         };
-    }, dependencies);
+    }, []);
 
     const throttledCallback = useCallback((...args: T) => {
         const now = Date.now();
         const timeElapsed = now - lastRun.current;
+
+        argsRef.current = args;
 
         if (timeElapsed >= delay) {
             callbackRef.current(...args);
@@ -34,7 +37,9 @@ function useThrottle<T extends any[]>(
                 return;
             }
             timer.current = setTimeout(() => {
-                callbackRef.current(...args);
+                if (argsRef.current) {
+                    callbackRef.current(...argsRef.current);
+                }
                 lastRun.current = Date.now();
                 timer.current = null;
             }, delay - timeElapsed);

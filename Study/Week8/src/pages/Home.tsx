@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useLpsInfinite } from '../hooks/useLpsInfinite'
 import { useSearch } from '../hooks/useSearch'
+import useThrottle from '../hooks/useThrottle'
 import LpCard from '../components/lp/LpCard'
 import LpCardSkeleton from '../components/lp/LpCardSkeleton'
 import ErrorMessage from '../components/common/ErrorMessage'
@@ -30,13 +31,13 @@ export default function Home() {
     [data]
   )
 
-  const handleIntersection = useCallback(
+  const handleIntersection = useThrottle(
     (entries: IntersectionObserverEntry[]) => {
-
       if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
         fetchNextPage()
       }
     },
+    1000,
     [fetchNextPage, hasNextPage, isFetchingNextPage]
   )
 
