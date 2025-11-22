@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { Bars3Icon } from '@heroicons/react/24/outline'
 import { useAuth } from '../../contexts/AuthContext'
-import { useSidebar } from '../../contexts/SidebarContext'
+import { useSidebarContext } from '../../contexts/SidebarContext'
 import { useLogout } from '../../hooks/useLogout'
 
 const buttonStyles = {
@@ -13,7 +13,7 @@ const buttonStyles = {
 function Header() {
   const location = useLocation()
   const { isAuthenticated, user } = useAuth()
-  const sidebar = useSidebar()
+  const { toggle } = useSidebarContext()
   const { mutate: logout } = useLogout()
 
   const getButtonClassName = (path: string) => {
@@ -23,14 +23,14 @@ function Header() {
 
   return (
     <header className="bg-black border-b border-gray-800 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <nav className="flex justify-between items-center h-16 gap-4">
 
           <div className="flex items-center">
-            {sidebar && (
+            {isAuthenticated && (
               <button
-                onClick={sidebar.toggleSidebar}
-                className="md:hidden p-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+                onClick={toggle}
+                className="p-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
                 aria-label="메뉴 열기"
               >
                 <Bars3Icon className="w-6 h-6" />

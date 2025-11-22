@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router'
-import { useSidebar } from '../../contexts/SidebarContext'
+import { useSidebarContext } from '../../contexts/SidebarContext'
 import { useSearch } from '../../hooks/useSearch'
 import {
   HomeIcon,
@@ -13,15 +13,10 @@ import ConfirmModal from '../common/ConfirmModal'
 
 export default function Sidebar() {
   const location = useLocation()
-  const sidebar = useSidebar()
+  const { isOpen, close, sidebarRef } = useSidebarContext()
   const { openModal } = useSearch()
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false)
   const { mutate: withdraw } = useWithdraw()
-
-  // Context 문제 fallback
-  const isOpen = sidebar?.isOpen ?? false
-  const closeSidebar = sidebar?.closeSidebar ?? (() => {})
-  const sidebarRef = sidebar?.sidebarRef
 
   // 검색은 홈에서만
   const isHomePage = location.pathname === '/'
@@ -55,8 +50,8 @@ export default function Sidebar() {
       {/* 사이드바 백드롭 */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
-          onClick={closeSidebar}
+          className="fixed inset-0 bg-black/50 z-40"
+          onClick={close}
           aria-hidden="true"
         />
       )}
@@ -75,7 +70,7 @@ export default function Sidebar() {
           flex flex-col
           z-50
           transition-transform duration-300 ease-in-out
-          ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
         aria-label="사이드바"
       >

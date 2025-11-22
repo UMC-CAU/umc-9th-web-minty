@@ -1,18 +1,23 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useEffect, useRef } from 'react'
+import { createContext, useContext } from 'react'
 import type { ReactNode } from 'react'
+import { useSidebar } from '../hooks/useSidebar'
 
 interface SidebarContextType {
   isOpen: boolean
-  toggleSidebar: () => void
-  closeSidebar: () => void
+  toggle: () => void
+  close: () => void
+  open: () => void
   sidebarRef: React.RefObject<HTMLDivElement | null>
 }
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined)
 
-export const useSidebar = () => {
+export const useSidebarContext = () => {
   const context = useContext(SidebarContext)
+  if (context === undefined) {
+    throw new Error('useSidebarContext must be used within a SidebarProvider')
+  }
   return context
 }
 
@@ -21,57 +26,10 @@ interface SidebarProviderProps {
 }
 
 export const SidebarProvider = ({ children }: SidebarProviderProps) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const sidebarRef = useRef<HTMLDivElement>(null)
-
-  const toggleSidebar = () => {
-    setIsOpen((prev) => !prev)
-  }
-
-  const closeSidebar = () => {
-    setIsOpen(false)
-  }
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target as Node) &&
-        isOpen
-      ) {
-        closeSidebar()
-      }
-    }
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isOpen])
-
-  useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen) {
-        closeSidebar()
-      }
-    }
-
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape)
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleEscape)
-    }
-  }, [isOpen])
+  const sidebar = useSidebar()
 
   return (
-    <SidebarContext.Provider
-      value={{ isOpen, toggleSidebar, closeSidebar, sidebarRef }}
-    >
+    <SidebarContext.Provider value={sidebar}>
       {children}
     </SidebarContext.Provider>
   )
