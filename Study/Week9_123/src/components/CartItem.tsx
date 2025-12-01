@@ -1,11 +1,10 @@
-import { useDispatch } from 'react-redux';
-import { removeItem, increase, decrease } from '../slices/cartSlice';
-import type { CartItem as CartItemType } from '../slices/cartSlice';
+import { useCartStore } from '../store/useCartStore';
+import type { CartItem as CartItemType } from '../store/useCartStore';
 
 interface CartItemProps extends CartItemType {}
 
 const CartItem = ({ id, title, singer, price, img, amount }: CartItemProps) => {
-  const dispatch = useDispatch();
+  const { removeItem, increase, decrease } = useCartStore();
 
   return (
     <article className="flex justify-between items-center py-4 border-b border-gray-700">
@@ -26,10 +25,10 @@ const CartItem = ({ id, title, singer, price, img, amount }: CartItemProps) => {
           className="w-8 h-8 flex items-center justify-center bg-gray-700 text-white hover:bg-gray-600 transition-colors rounded-l-md"
           onClick={() => {
             if (amount === 1) {
-              dispatch(removeItem(id));
+              removeItem(id);
               return;
             }
-            dispatch(decrease(id));
+            decrease(id);
           }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -41,7 +40,7 @@ const CartItem = ({ id, title, singer, price, img, amount }: CartItemProps) => {
         </div>
         <button
           className="w-8 h-8 flex items-center justify-center bg-gray-700 text-white hover:bg-gray-600 transition-colors rounded-r-md"
-          onClick={() => dispatch(increase(id))}
+          onClick={() => increase(id)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />

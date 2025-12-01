@@ -1,8 +1,7 @@
-import { useSelector } from 'react-redux';
-import type { RootState } from '../store';
+import { useCartStore } from '../store/useCartStore';
 
 const Navbar = () => {
-  const { amount } = useSelector((state: RootState) => state.cart);
+  const { amount } = useCartStore();
 
   return (
     <nav className="bg-[#212529] py-4 px-8 shadow-md sticky top-0 z-50">

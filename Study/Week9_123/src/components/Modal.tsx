@@ -1,11 +1,9 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { closeModal } from '../slices/modalSlice';
-import { clearCart } from '../slices/cartSlice';
-import type { RootState } from '../store';
+import { useModalStore } from '../store/useModalStore';
+import { useCartStore } from '../store/useCartStore';
 
 const Modal = () => {
-    const dispatch = useDispatch();
-    const { isOpen } = useSelector((state: RootState) => state.modal);
+    const { isOpen, closeModal } = useModalStore();
+    const { clearCart } = useCartStore();
 
     if (!isOpen) {
         return null;
@@ -28,7 +26,7 @@ const Modal = () => {
                         type='button'
                         className='flex-1 px-6 py-3 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white rounded-xl transition-all duration-300 font-semibold'
                         onClick={() => {
-                            dispatch(closeModal());
+                            closeModal();
                         }}
                     >
                         취소
@@ -37,8 +35,8 @@ const Modal = () => {
                         type='button'
                         className='flex-1 px-6 py-3 bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500 hover:text-white hover:border-red-500 rounded-xl transition-all duration-300 font-semibold'
                         onClick={() => {
-                            dispatch(clearCart());
-                            dispatch(closeModal());
+                            clearCart();
+                            closeModal();
                         }}
                     >
                         비우기

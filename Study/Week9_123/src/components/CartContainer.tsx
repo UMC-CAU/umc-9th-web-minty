@@ -1,11 +1,10 @@
-import { useDispatch, useSelector } from 'react-redux';
 import CartItem from './CartItem';
-import { openModal } from '../slices/modalSlice';
-import type { RootState } from '../store';
+import { useCartStore } from '../store/useCartStore';
+import { useModalStore } from '../store/useModalStore';
 
 const CartContainer = () => {
-  const dispatch = useDispatch();
-  const { cartItems, total, amount } = useSelector((state: RootState) => state.cart);
+  const { cartItems, total, amount } = useCartStore();
+  const { openModal } = useModalStore();
 
   if (amount < 1) {
     return (
@@ -46,7 +45,7 @@ const CartContainer = () => {
           <button
             className="px-8 py-3 bg-transparent text-red-500 border border-red-500 rounded-lg hover:bg-red-500/10 transition-all duration-300 font-bold tracking-wide uppercase text-sm"
             onClick={() => {
-              dispatch(openModal());
+              openModal();
             }}
           >
             장바구니 비우기
