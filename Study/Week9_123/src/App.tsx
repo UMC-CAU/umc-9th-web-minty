@@ -1,13 +1,24 @@
-
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Navbar from './components/Navbar';
+import CartContainer from './components/CartContainer';
+import { calculateTotals } from './slices/cartSlice';
+import type { RootState } from './store';
 
 function App() {
+  const dispatch = useDispatch();
+  const { cartItems } = useSelector((state: RootState) => state.cart);
+
+  useEffect(() => {
+    dispatch(calculateTotals());
+  }, [cartItems, dispatch]);
+
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <p className="text-gray-700">Hello World.</p>
-      </div>
-    </div>
-  )
+    <main>
+      <Navbar />
+      <CartContainer />
+    </main>
+  );
 }
 
-export default App
+export default App;
