@@ -1,22 +1,7 @@
-import { BrowserRouter as Router, useRoutes } from 'react-router-dom'
-import { AuthProvider } from './contexts/AuthContext'
-import { SidebarProvider } from './contexts/SidebarContext'
-import { routes } from './routes'
+import UseReducerCompany from './useReducer/UseReducerrCompany';
 
-function AppRoutes() {
-  return useRoutes(routes)
-}
-
-function App() {
+export default function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <SidebarProvider>
-          <AppRoutes />
-        </SidebarProvider>
-      </AuthProvider>
-    </Router>
-  )
+    <UseReducerCompany />
+  );
 }
-
-export default App
