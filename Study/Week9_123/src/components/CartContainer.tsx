@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import CartItem from './CartItem';
-import { clearCart } from '../slices/cartSlice';
+import { openModal } from '../slices/modalSlice';
 import type { RootState } from '../store';
 
 const CartContainer = () => {
@@ -46,9 +46,7 @@ const CartContainer = () => {
           <button
             className="px-8 py-3 bg-transparent text-red-500 border border-red-500 rounded-lg hover:bg-red-500/10 transition-all duration-300 font-bold tracking-wide uppercase text-sm"
             onClick={() => {
-              if (window.confirm('장바구니를 비우시겠습니까?')) {
-                dispatch(clearCart());
-              }
+              dispatch(openModal());
             }}
           >
             장바구니 비우기
