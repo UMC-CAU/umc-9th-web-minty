@@ -7,3 +7,4 @@
 - **Week6:** useQuery와 useInfiniteQuery로 무한 스크롤과 효율적인 데이터 패칭하기
 - **Week7:** useMutation과 Optimistic Update
 - **Week8:** Debouncing & Throttling으로 최적화하기 + Sidebar 다시 생각하며 리팩토링 해보기
+- **Week9:** Redux Toolkit 활용해서 장바구니 만들기 + Modal Slice 활용하여, 모달 기능 + Redux Toolkit으로 만든 장바구니를 Zustand로 리팩토링
